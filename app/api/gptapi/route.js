@@ -1,10 +1,8 @@
 import { BardAI } from "bardie";
-export const dynamic = "force-dynamic";
-// 서버 측 GET 요청을 처리하는 비동기 함수입니다.
+
 export async function GET(req, res) {
   const bard = new BardAI();
   try {
-    // URL 쿼리 문자열로부터 사용자 입력 파라미터를 추출합니다.
     const { username } = Object.fromEntries(req.nextUrl.searchParams);
     const { gender, date, calendartype, time } = JSON.parse(username);
 
