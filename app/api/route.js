@@ -6,7 +6,7 @@ export async function POST(req) {
     password,
     name,
     gender,
-    adderss,
+    address,
     date,
     time,
     calendartype,
@@ -16,14 +16,14 @@ export async function POST(req) {
     privacy,
   } = await req.json();
   const data = await queryExecute(
-    `insert into member(id,password,name,gender,adderss,date,time,calendartype,job,self,kakao,privacy)
+    `insert into member(id,password,name,gender,address,date,time,calendartype,job,self,kakao,privacy)
     values(?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       id,
       password,
       name,
       gender,
-      adderss,
+      address,
       date,
       time,
       calendartype,

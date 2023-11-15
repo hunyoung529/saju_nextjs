@@ -121,7 +121,7 @@ function Join() {
         </div>
         <input
           type="text"
-          name="adderss"
+          name="address"
           placeholder="지역 (시, 구까지 적어주세요)"
           autoComplete="off"
         ></input>
