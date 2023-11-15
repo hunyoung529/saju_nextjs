@@ -25,6 +25,11 @@
       "src": "/favicomatic/favicon-196x196.png",
       "sizes": "196x196",
       "type": "image/png"
+    },
+    {
+      "src": "/favicomatic/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
     }
   ]
 }
