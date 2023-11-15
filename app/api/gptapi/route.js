@@ -1,5 +1,5 @@
 import { BardAI } from "bardie";
-
+export const dynamic = "auto";
 async function fetchBardQuestion(question) {
   const bard = new BardAI();
   try {
