@@ -1,5 +1,5 @@
 import { BardAI } from "bardie";
-export const dynamic = "force-dynamic";
+
 // 서버 측 GET 요청을 처리하는 비동기 함수입니다.
 export async function GET(req, res) {
   const bard = new BardAI();
