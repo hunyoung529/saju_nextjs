@@ -26,6 +26,7 @@ const Myfortune = function () {
 
     axios(`/api/gptapi?username=${JSON.stringify(loginUser)}`).then((res) => {
       setAnswer(res.data);
+      console.log(res);
     });
   }, [loginUser]);
 
@@ -65,22 +66,16 @@ const Myfortune = function () {
       updateFortune();
     }
   }, [answer]);
+  console.log(fortuneData?.fortune);
+  console.log(answer);
+
   return (
     <div className={styles.myfortuneWrap}>
       <img src="../../imges/main_angel_cut.png" />
       <div className={styles.title}>당신의 운세</div>
       {fortuneData && fortuneData?.fortune !== null ? (
         <div style={{ whiteSpace: "pre-line" }}>
-          <div className={styles.fortune}>
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  fortuneData && fortuneData.fortune
-                    ? fortuneData.fortune.replaceAll(".", ".<br>")
-                    : "",
-              }}
-            ></div>
-          </div>
+          <div className={styles.fortune}>{fortuneData.fortune}</div>
           <div className={styles.row}>
             <div>
               <p className={styles.eleTitle}>&lt; 나의 5행 &gt;</p>
