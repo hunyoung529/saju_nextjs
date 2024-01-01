@@ -28,11 +28,6 @@ const Myfortune = function () {
       setAnswer(res.data);
       console.log(res);
     });
-  }, [loginUser]);
-
-  useEffect(() => {
-    if (!loginUser) return;
-
     async function fetchFortune() {
       try {
         const res = await axios.get(
@@ -43,8 +38,6 @@ const Myfortune = function () {
         console.error("Error fetching fortune:", error);
       }
     }
-
-    fetchFortune();
   }, [loginUser]);
 
   useEffect(() => {
