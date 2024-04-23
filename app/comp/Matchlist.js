@@ -52,7 +52,7 @@ function Matchlist() {
   const getFData = () => {
     axios.get("/api/fortune").then((res) => {
       const data = res.data;
-      console.log(data);
+
       setFData(data);
     });
   };
@@ -179,7 +179,7 @@ function Matchlist() {
         setMatching(matchArry);
       });
   };
-  console.log(matching);
+
   useEffect(() => {
     !Fdata.length ? fetchData() : matchingData();
   }, [Fdata]);
@@ -215,8 +215,6 @@ function Matchlist() {
     );
 
   const matchedMembers = getMatchingMembers();
-
-  console.log(matchedMembers);
 
   return (
     <>
