@@ -8,7 +8,7 @@ const Myfortune = function () {
   const [fortuneData, setFortuneData] = useState(null);
 
   useEffect(() => {
-    if (!loginUser) return;
+    if (!loginUser || fortuneData) return;
 
     fetch(`/api/fortune?id=${loginUser.id}&type=fortuneCheck`)
       .then((res) => res.json())
@@ -20,7 +20,7 @@ const Myfortune = function () {
         }
       })
       .catch((err) => console.error("Error fetching fortune:", err));
-  }, [loginUser]);
+  }, [loginUser, fortuneData]);
 
   function askGptFortune() {
     fetch("/api/gptapi", {
