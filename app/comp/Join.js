@@ -6,6 +6,11 @@ import { useRouter } from "next/navigation";
 
 function Join() {
   const nav = useRouter();
+  const elId = useRef();
+  const [msg, setMsg] = useState("");
+  const [use, setUse] = useState();
+  const [msgSt, setMsgSt] = useState({});
+  const [idValidated, setIdValidated] = useState(false);
 
   function genderPick(e) {
     const target = e.target;
@@ -16,20 +21,45 @@ function Join() {
     }
   }
 
+  const idCheck = async (e) => {
+    e.preventDefault();
+    const id = elId.current.value;
+    if (!id) {
+      setMsg("아이디를 입력하세요.");
+      setMsgSt({ color: "red" });
+      setIdValidated(false);
+      return;
+    }
+    await axios.get(`/api/idcheck?id=${id}`).then((res) => {
+      setUse(res.data);
+      if (res.data === "중복") {
+        setMsg("다시확인해주세요");
+        setMsgSt({ color: "red" });
+        setIdValidated(false);
+      } else {
+        setMsg("사용가능합니다.");
+        setMsgSt({ color: "green" });
+        setIdValidated(true);
+      }
+    });
+  };
+
   const insertJoin = (e) => {
     e.preventDefault();
+    if (!idValidated) {
+      alert("중복 체크를 하세요.");
+      return;
+    }
+
     const formData = new FormData(e.target);
     const value = Object.fromEntries(formData);
-
     const maleChecked = e.target.elements.male.checked;
     const femaleChecked = e.target.elements.female.checked;
     const privacyAgree = e.target.elements.privacy.checked;
 
     let allFilled = true;
-
     if (!maleChecked && !femaleChecked) allFilled = false;
     if (!privacyAgree) allFilled = false;
-
     for (let key in value) {
       if (!value[key]) {
         allFilled = false;
@@ -47,25 +77,6 @@ function Join() {
     axios.post("/api/matchlist", { id: value.id });
     nav.push("./login");
   };
-
-  const elId = useRef();
-  const [msg, setMsg] = useState("");
-  const [use, setUse] = useState();
-  const [msgSt, setMsgSt] = useState({});
-
-  const idCheck = async (e) => {
-    e.preventDefault();
-    await axios.get(`/api/idcheck?id=${elId.current.value}`).then((res) => {
-      setUse(res.data);
-      if (res.data == "중복") {
-        setMsg("다시확인해주세요");
-        setMsgSt({ color: "red" });
-      } else {
-        setMsg("사용가능합니다.");
-        setMsgSt({ color: "green" });
-      }
-    });
-  };
   return (
     <div className={joinSt.j_home}>
       <h3>
@@ -74,7 +85,7 @@ function Join() {
         아래에 프로필을 작성해 주세요.
       </h3>
       <div className={joinSt.idcheck}>
-        <p>{msg}</p>
+        <p style={msgSt}>{msg}</p>
         <button className={joinSt.check} onClick={idCheck}>
           중복체크
         </button>

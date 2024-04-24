@@ -39,6 +39,7 @@ const Myfortune = function () {
           updateFortune(data);
         } else {
           console.error("No fortune data received from GPT API");
+          console.log(data);
         }
       })
       .catch((err) => console.error("Error fetching new fortune data:", err));
