@@ -13,63 +13,55 @@ const Myfortune = function () {
     fetch(`/api/fortune?id=${loginUser.id}&type=fortuneCheck`)
       .then((res) => res.json())
       .then((data) => {
-        if (data && data.fortune) {
+        if (data && data[0].fortune) {
           setFortuneData(data[0]);
         } else {
           askGptFortune();
         }
       })
       .catch((err) => console.error("Error fetching fortune:", err));
-  }, [loginUser, fortuneData]);
+  }, [loginUser]);
 
-  function askGptFortune() {
-    fetch("/api/gptapi", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        gender: loginUser.gender,
-        date: loginUser.date,
-        calendartype: loginUser.calendartype,
-        time: loginUser.time,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.fortune) {
-          updateFortune(data);
-        } else {
-          console.error("No fortune data received from GPT API");
-          console.log(data);
-        }
-      })
-      .catch((err) => console.error("Error fetching new fortune data:", err));
+  async function askGptFortune() {
+    try {
+      const res = await fetch("/api/gptapi", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          gender: loginUser.gender,
+          date: loginUser.date,
+          calendartype: loginUser.calendartype,
+          time: loginUser.time,
+        }),
+      });
+      const data = await res.json();
+      if (data.fortune) {
+        await updateFortune(data);
+      } else {
+        console.error("No fortune data received from GPT API");
+      }
+    } catch (err) {
+      console.error("Error fetching new fortune data:", err);
+    }
   }
-  function updateFortune(data) {
-    fetch(`/api/fortune/${loginUser.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fortune: data.fortune,
-        myelement: data.myelement,
-        yourelement: data.yourelement,
-      }),
-    })
-      .then((response) => response.json())
-      .then((updatedData) => {
-        refreshFortune();
-        console.log("Fortune updated successfully", updatedData);
-      })
-      .catch((err) => console.error("Failed to update fortune:", err));
-  }
-  function refreshFortune() {
-    fetch(`/api/fortune?id=${loginUser.id}&type=fortuneCheck`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.length > 0) {
-          setFortuneData(data[0]);
-        }
-      })
-      .catch((err) => console.error("Error refetching updated fortune:", err));
+
+  async function updateFortune(data) {
+    try {
+      const response = await fetch(`/api/fortune/${loginUser.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fortune: data.fortune,
+          myelement: data.myelement,
+          yourelement: data.yourelement,
+        }),
+      });
+      const updatedData = await response.json();
+      setFortuneData(updatedData);
+      console.log("Fortune updated successfully", updatedData);
+    } catch (err) {
+      console.error("Failed to update fortune:", err);
+    }
   }
 
   return (
